@@ -77,8 +77,6 @@ names = [("Александр", "m"),
          ]
 last_names = ["Гусь", "Лось",	"Крот", "Холод", "Царь", "Князь", "Шабан", "Юсуп", "Бык"]
 country_codes = [0, 0, 0, 135, 0, 2, 0, 11, 0, 115, 0, 6, 0]
-# # sms_active_key = '7c27f8c57d46c48ff1726643e85Ac37b'
-# sms_active_key = "28ee25c3e7d1f3d03A631fccdA0A7dbb"
 
 
 def get_number(attempt=0):
