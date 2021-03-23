@@ -8,21 +8,21 @@ import requests
 import pywinauto
 from pywinauto import application
 
-number = {1: (150, 540),
-          2: (250, 540),
-          3: (370, 540),
-          4: (150, 590),
-          5: (250, 590),
-          6: (370, 590),
-          7: (150, 640),
-          8: (250, 640),
-          9: (370, 640),
-          0: (250, 680)
+number = {1: (450, 540),
+          2: (550, 540),
+          3: (670, 540),
+          4: (450, 590),
+          5: (550, 590),
+          6: (670, 590),
+          7: (450, 640),
+          8: (550, 640),
+          9: (670, 640),
+          0: (550, 680)
           }
 
 sex = {
-    "m": (400, 202),
-    "w": (400, 232)
+    "m": (700, 202),
+    "w": (700, 232)
 }
 
 names = [("Александр", "m"),
@@ -75,7 +75,7 @@ names = [("Александр", "m"),
          ("Амина", "w"),
          ("Таисия", "w"),
          ]
-last_names = ["Гусь", "Лось",	"Крот", "Холод", "Царь", "Князь", "Шабан", "Юсуп", "Бык"]
+last_names = ["Гусь", "Лось", "Крот", "Холод", "Царь", "Князь", "Шабан", "Юсуп", "Бык"]
 country_codes = [0, 0, 0, 135, 0, 2, 0, 11, 0, 115, 0, 6, 0]
 
 
@@ -121,8 +121,9 @@ def get_status(id):
 
 
 def get_pass(length):
+    password = ''.join(random.choice(string.ascii_uppercase) for i in range(int(length / 2)))
+    return password.join(random.choice(string.ascii_lowercase) for i in range(int(length / 2)))
 
-    return ''.join(random.choice(string.ascii_lowercase) for i in range(length))
 
 def get_key(id):
     try:
@@ -137,43 +138,73 @@ def get_key(id):
         return None
 
 
-def start():
+def restart():
+    app = application.Application().start("D:\\Program Files\\Nox\\bin\\MultiPlayerManager.exe")
+    time.sleep(35)
+    pywinauto.mouse.click(coords=(1060, 240))
+    time.sleep(2)
+    pywinauto.mouse.click(coords=(760, 430))
+    time.sleep(2)
+    app.kill()
+    time.sleep(10)
 
     app = application.Application().start("D:\\Program Files\\Nox\\bin\\Nox.exe")
+    time.sleep(60)
+    app.kill()
+    app = application.Application().start("D:\\Program Files\\Nox\\bin\\Nox.exe")
+    time.sleep(60)
+    pywinauto.mouse.click(coords=(410, 250))
+    time.sleep(10)
+    pywinauto.mouse.click(coords=(270, 350))
+    time.sleep(10)
+    app.kill()
+
+
+def start():
+    pywinauto.mouse.move(coords=(640, 340))
+    # restart()
+    print("start")
+    app = application.Application().start("D:\\Program Files\\Nox\\bin\\Nox.exe")
+
     try:
         time.sleep(35)
         # pywinauto.mouse.move(coords=(640, 340))
-        pywinauto.mouse.click(coords=(640, 340))
+        pywinauto.mouse.click(coords=(940, 240))
         # delete_user_from_phone()
 
         time.sleep(15)
-        pywinauto.mouse.click(coords=(250, 320))
+        pywinauto.mouse.click(coords=(550, 320))
         time.sleep(2)
-        pywinauto.mouse.click(coords=(313, 330))
+        pywinauto.mouse.click(coords=(613, 330))
         time.sleep(2)
         # Name
         name = random.choice(names)
         last_name = random.choice(last_names)
         pywinauto.keyboard.send_keys(name[0])
         time.sleep(2)
-        pywinauto.mouse.click(coords=(322, 198))
+        pywinauto.mouse.click(coords=(622, 198))
         time.sleep(3)
         pywinauto.keyboard.send_keys(last_name)
         time.sleep(2)
-        pywinauto.mouse.click(coords=(320, 230))
+        pywinauto.mouse.click(coords=(620, 230))
         time.sleep(5)
         # Phone
-        pywinauto.mouse.click(coords=(250, 250))
+        pywinauto.mouse.click(coords=(550, 250))
         for i in range(15):
             time.sleep(0.01)
             pywinauto.keyboard.send_keys('{BACKSPACE}')
 
         time.sleep(0.5)
         phone_number, id = get_number(0)
+        if phone_number is None:
+            time.sleep(5)
+            app.kill()
+            time.sleep(5)
+            return False
         print(phone_number)
         pywinauto.keyboard.send_keys(str(phone_number))
         time.sleep(0.5)
-        pywinauto.mouse.click(coords=(313, 288))
+        pywinauto.mouse.click(coords=(513, 288))
         # DOB
         # day
 
@@ -203,7 +234,7 @@ def start():
         first_year_n = random.randint(0, 9)
         pywinauto.mouse.click(coords=(number.get(first_year_n)[0], number.get(first_year_n)[1]))
         time.sleep(0.5)
-        pywinauto.mouse.click(coords=(303, 245))
+        pywinauto.mouse.click(coords=(603, 245))
 
         # sex
         time.sleep(0.5)
@@ -212,96 +243,112 @@ def start():
 
         # password
         time.sleep(0.5)
-        password = "EWr@213123"
+        password = get_pass(random.randint(3, 7))
         pywinauto.keyboard.send_keys(password)
         passwordn = get_pass(random.randint(3, 7))
         time.sleep(0.7)
         pywinauto.keyboard.send_keys(passwordn)
         password += passwordn
-        passwordn = str(random.randint(100, 90907))
+        passwordn = str(random.randint(400, 90907))
         time.sleep(0.5)
         pywinauto.keyboard.send_keys(passwordn)
         password += passwordn
         print(password)
-        try:
-            file2write = open(phone_number, 'w')
-            file2write.write(password)
-            file2write.close()
-        except Exception:
-            pass
+
         time.sleep(0.5)
-        pywinauto.mouse.click(coords=(283, 250))
+        pywinauto.mouse.click(coords=(583, 250))
 
         # reg
         time.sleep(0.5)
-        pywinauto.mouse.click(coords=(283, 250))
+        pywinauto.mouse.click(coords=(583, 250))
         time.sleep(20)
 
         # save data
         time.sleep(0.5)
-        pywinauto.mouse.click(coords=(180, 680))
+        pywinauto.mouse.click(coords=(480, 680))
 
         # get sms_code
         code = get_key(id)
         if code is None:
-            pywinauto.mouse.click(coords=(180, 680))
+            pywinauto.mouse.click(coords=(480, 680))
             time.sleep(2)
-            pywinauto.mouse.click(coords=(280, 400))
+            pywinauto.mouse.click(coords=(580, 400))
             delete_user_from_phone()
             time.sleep(5)
             app.kill()
+            time.sleep(5)
+            return False
         else:
+            try:
+                file2write = open(phone_number, 'w')
+                file2write.write(phone_number + " " + password)
+                file2write.close()
+            except Exception:
+                pass
             print(code)
             time.sleep(0.5)
-            pywinauto.mouse.click(coords=(220, 200))
+            pywinauto.mouse.click(coords=(520, 200))
             time.sleep(0.5)
             pywinauto.keyboard.send_keys(str(code))
             time.sleep(0.5)
-            pywinauto.mouse.click(coords=(220, 235))
+            pywinauto.mouse.click(coords=(520, 235))
             time.sleep(15)
 
             # log settings
             time.sleep(0.5)
-            pywinauto.mouse.click(coords=(90, 480))
+            pywinauto.mouse.click(coords=(390, 480))
             time.sleep(0.5)
-            pywinauto.mouse.click(coords=(385, 75))
+            pywinauto.mouse.click(coords=(685, 75))
             time.sleep(0.5)
-            pywinauto.mouse.click(coords=(385, 75))
+            pywinauto.mouse.click(coords=(685, 75))
             time.sleep(10)
-            pywinauto.mouse.click(coords=(190, 680))
+            pywinauto.mouse.click(coords=(490, 680))
             time.sleep(10)
-            pywinauto.mouse.click(coords=(400, 70))
+            pywinauto.mouse.click(coords=(695, 100))
             time.sleep(3)
-            pywinauto.mouse.press(coords=(350, 170))
+            pywinauto.mouse.press(coords=(650, 170))
             time.sleep(0.1)
-            pywinauto.mouse.scroll(coords=(350, 170), wheel_dist=-1)
+            pywinauto.mouse.scroll(coords=(650, 170), wheel_dist=-1)
             time.sleep(0.1)
-            pywinauto.mouse.release(coords=(350, 170))
+            pywinauto.mouse.release(coords=(650, 170))
             time.sleep(0.1)
-            pywinauto.mouse.press(coords=(350, 170))
+            pywinauto.mouse.press(coords=(650, 170))
             time.sleep(0.1)
-            pywinauto.mouse.scroll(coords=(350, 170), wheel_dist=-1)
+            pywinauto.mouse.scroll(coords=(650, 170), wheel_dist=-1)
             time.sleep(0.1)
-            pywinauto.mouse.release(coords=(350, 170))
-            pywinauto.mouse.click(coords=(150, 690))
+            pywinauto.mouse.release(coords=(650, 170))
+            pywinauto.mouse.click(coords=(450, 690))
             time.sleep(0.5)
-            pywinauto.mouse.click(coords=(250, 350))
+            pywinauto.mouse.click(coords=(550, 350))
             print("ok")
             delete_user_from_phone()
             app.kill()
-
+        return True
     except Exception:
         app.kill()
+        return False
 
 
 def delete_user_from_phone():
     time.sleep(1)
-    pywinauto.mouse.click(coords=(400, 130))
+    pywinauto.mouse.click(coords=(700, 130))
     time.sleep(1)
-    pywinauto.mouse.click(coords=(300, 250))
+    pywinauto.mouse.click(coords=(600, 250))
     time.sleep(0.5)
-    pywinauto.mouse.click(coords=(300, 430))
+    pywinauto.mouse.click(coords=(600, 430))
 
 
 if __name__ == '__main__':
     start()
+    iterator = 0
+    mistake = 0
+    while True:
+        if not start():
+            mistake += 1
+        time.sleep(30)
+        iterator += 1
+        if iterator >= 10 or mistake > 10:
+            iterator = 0
+            mistake = 0
+            restart()
+            
