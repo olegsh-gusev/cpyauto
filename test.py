@@ -138,6 +138,13 @@ def get_key(id):
         return None
 
 
+def open_fb():
+    pywinauto.mouse.click(coords=(410, 250))
+    time.sleep(2)
+    pywinauto.mouse.click(coords=(270, 350))
+    time.sleep(2)
+
+
 def restart():
     app = application.Application().start("D:\\Program Files\\Nox\\bin\\MultiPlayerManager.exe")
     time.sleep(35)
@@ -153,23 +160,18 @@ def restart():
     app.kill()
     app = application.Application().start("D:\\Program Files\\Nox\\bin\\Nox.exe")
     time.sleep(60)
-    pywinauto.mouse.click(coords=(410, 250))
-    time.sleep(10)
-    pywinauto.mouse.click(coords=(270, 350))
-    time.sleep(10)
+    open_fb()
     app.kill()
 
 
 def start():
-    pywinauto.mouse.move(coords=(640, 340))
-    # restart()
     print("start")
     app = application.Application().start("D:\\Program Files\\Nox\\bin\\Nox.exe")
 
     try:
         time.sleep(35)
         # pywinauto.mouse.move(coords=(640, 340))
-        pywinauto.mouse.click(coords=(940, 240))
+        open_fb()
         # delete_user_from_phone()
 
         time.sleep(15)
@@ -292,14 +294,14 @@ def start():
             pywinauto.keyboard.send_keys(str(code))
             time.sleep(0.5)
             pywinauto.mouse.click(coords=(520, 235))
-            time.sleep(15)
+            time.sleep(20)
 
             # log settings
-            time.sleep(0.5)
+            time.sleep(1)
             pywinauto.mouse.click(coords=(390, 480))
-            time.sleep(0.5)
+            time.sleep(1)
             pywinauto.mouse.click(coords=(685, 75))
-            time.sleep(0.5)
+            time.sleep(1)
             pywinauto.mouse.click(coords=(685, 75))
             time.sleep(10)
             pywinauto.mouse.click(coords=(490, 680))
@@ -307,18 +309,18 @@ def start():
             pywinauto.mouse.click(coords=(695, 100))
             time.sleep(3)
             pywinauto.mouse.press(coords=(650, 170))
-            time.sleep(0.1)
+            time.sleep(1)
             pywinauto.mouse.scroll(coords=(650, 170), wheel_dist=-1)
-            time.sleep(0.1)
+            time.sleep(1)
             pywinauto.mouse.release(coords=(650, 170))
-            time.sleep(0.1)
+            time.sleep(1)
             pywinauto.mouse.press(coords=(650, 170))
-            time.sleep(0.1)
+            time.sleep(1)
             pywinauto.mouse.scroll(coords=(650, 170), wheel_dist=-1)
-            time.sleep(0.1)
+            time.sleep(1)
             pywinauto.mouse.release(coords=(650, 170))
             pywinauto.mouse.click(coords=(450, 690))
-            time.sleep(0.5)
+            time.sleep(1)
             pywinauto.mouse.click(coords=(550, 350))
             print("ok")
             delete_user_from_phone()
@@ -334,12 +336,12 @@ def delete_user_from_phone():
     pywinauto.mouse.click(coords=(700, 130))
     time.sleep(1)
     pywinauto.mouse.click(coords=(600, 250))
-    time.sleep(0.5)
+    time.sleep(1)
     pywinauto.mouse.click(coords=(600, 430))
 
 
 if __name__ == '__main__':
-    start()
+    restart()
     iterator = 0
     mistake = 0
     while True:
@@ -347,8 +349,11 @@ if __name__ == '__main__':
             mistake += 1
         time.sleep(30)
         iterator += 1
-        if iterator >= 10 or mistake > 10:
+        print(iterator)
+        print(mistake)
+        if iterator + mistake >= 10 or mistake > 5:
             iterator = 0
             mistake = 0
             restart()
-            
+            time.sleep(300)
+
